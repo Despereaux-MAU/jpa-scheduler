@@ -2,39 +2,39 @@ package com.despereaux.jpascheduler.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @Table(name = "comments")
-@EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-    private String comment;
+    @ManyToOne
+    @JoinColumn(name = "schedule_id", nullable = false)
+    private Schedule schedule; // 댓글이 속한 일정
 
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDate createAt;
-    private LocalDate updateAt;
+    private String content;
+    private String username;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     // Constructors
     public Comment() {}
 
-    public Comment(String username, String comment, LocalDate createAt, LocalDate updateAt) {
+    public Comment(Schedule schedule, String content, String username) {
+        this.schedule = schedule;
+        this.content = content;
         this.username = username;
-        this.comment = comment;
-        this.createAt = createAt;
-        this.updateAt = updateAt;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
-    @ManyToOne
-    @JoinColumn(name = "schedules_id")
-    private Schedule schedule;
 }

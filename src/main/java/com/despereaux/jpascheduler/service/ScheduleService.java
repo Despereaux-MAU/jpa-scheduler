@@ -24,7 +24,7 @@ public class ScheduleService {
     public Optional<Schedule> findById(Long id) {
         return dao.findById(id);
     }
-    // 알정 저장
+    // 일정 저장
     @Transactional
     public void save(Schedule schedule) {
         dao.save(schedule);

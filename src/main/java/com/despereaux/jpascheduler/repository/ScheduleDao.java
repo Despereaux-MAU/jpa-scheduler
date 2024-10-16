@@ -24,26 +24,26 @@ public class ScheduleDao {
     // 부분 조회
     @Transactional
     public Optional<Schedule> findById(Long id) {
-        Schedule schedule = em.find(Schedule.class, id);
-        return Optional.ofNullable(schedule);
+        Schedule s = em.find(Schedule.class, id);
+        return Optional.ofNullable(s);
     }
     // 일정 저장
     @Transactional
-    public void save(Schedule schedule) {
-        em.persist(schedule);
+    public void save(Schedule s) {
+        em.persist(s);
     }
     // 일정 수정
     @Transactional
-    public void update(Schedule schedule) {
-        schedule.setUpdatedAt(LocalDateTime.now());
-        em.merge(schedule);
+    public void update(Schedule s) {
+        s.setUpdatedAt(LocalDateTime.now());
+        em.merge(s);
     }
     // 일정 삭제
     @Transactional
     public void delete(Long id) {
-        Schedule schedule = em.find(Schedule.class, id);
-        if (schedule != null) {
-            em.remove(schedule);
+        Schedule s = em.find(Schedule.class, id);
+        if (s != null) {
+            em.remove(s);
         }
     }
 }

@@ -2,16 +2,13 @@ package com.despereaux.jpascheduler.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @Table(name = "schedules")
-@EntityListeners(AuditingEntityListener.class)
 public class Schedule {
 
     @Id
@@ -28,6 +25,9 @@ public class Schedule {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true) // 일정 삭제 시 댓글도 함께 삭제
+    private List<Comment> comments; // 해당 일정에 속한 댓글들
+
     // Constructors
     public Schedule() {}
 
@@ -37,12 +37,5 @@ public class Schedule {
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
-    }
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<Comment> commentList = new ArrayList<>();
-
-    public void addCommentList(Comment comment) {
-        this.commentList.add(comment);
-        comment.setSchedule(this); // 외래 키(연관 관계) 설정
     }
 }
