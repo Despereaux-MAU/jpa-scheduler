@@ -1,7 +1,12 @@
 package com.despereaux.jpascheduler.service;
 
+
 import com.despereaux.jpascheduler.entity.Comment;
+import com.despereaux.jpascheduler.entity.Schedule;
 import com.despereaux.jpascheduler.repository.CommentDao;
+import com.despereaux.jpascheduler.repository.ScheduleDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,35 +15,33 @@ import java.util.Optional;
 @Service
 public class CommentService {
 
-    private final CommentDao dao;
+    @Autowired
+    private CommentDao commentDao;
 
-    public CommentService(CommentDao dao) {
-        this.dao = dao;
+    @Autowired
+    private ScheduleDao scheduleDao;
+
+    public void saveComment(@NonNull Comment comment) {
+        commentDao.save(comment);
     }
-    // 전체 조회 by 스케쥴
-    public List<Comment> findAllBySchedulerId(Long scheduleId) {
-        return dao.findAllByScheduleId(scheduleId);
+
+    public Optional<Comment> getCommentById(@NonNull Long id) {
+        return commentDao.findById(id);
     }
-    // 부분 조회
-    public Optional<Comment> findById(Long id) {
-        return dao.findById(id);
+
+    public List<Comment> getAllComments() {
+        return commentDao.findAll();
     }
-    // 댓글 저장
-    public void save(Comment c) {
-        dao.save(c);
+
+    public void updateComment(@NonNull Comment comment) {
+        commentDao.update(comment);
     }
-    // 댓글 수정
-    public void update(Long id, Comment c) {
-        Optional<Comment> existingComment = findById(id);
-        if (existingComment.isPresent()) {
-            Comment updatedComment = existingComment.get();
-            updatedComment.setContent(c.getContent());
-            updatedComment.setUsername(c.getUsername());
-            dao.save(updatedComment);
-        }
+
+    public void deleteComment(@NonNull Comment comment) {
+        commentDao.delete(comment);
     }
-    // 댓글 삭제
-    public void delete(Long id) {
-        dao.delete(id);
+
+    public Optional<Schedule> getScheduleById(Long id) {
+        return scheduleDao.findById(id);
     }
 }

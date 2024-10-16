@@ -9,11 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class JpaSchedulerApplication {
 
-    @Autowired
-    ScheduleRepository scheduleRepository;
-    CommentRepository commentRepository;
-
-    public static void main(String[] args) {
+public static void main(String[] args) {
         SpringApplication.run(JpaSchedulerApplication.class, args);
     }
 

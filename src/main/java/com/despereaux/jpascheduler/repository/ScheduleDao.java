@@ -4,9 +4,9 @@ import com.despereaux.jpascheduler.entity.Schedule;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,36 +14,31 @@ import java.util.Optional;
 public class ScheduleDao {
 
     @PersistenceContext
-    private EntityManager em;
-    // 전체 조회
+    private EntityManager entityManager;
+
     @Transactional
-    public List<Schedule> findAll() {
-        String jpql = "SELECT s FROM Schedule s";
-        return em.createQuery(jpql, Schedule.class).getResultList();
+    public void save(Schedule schedule) {
+        entityManager.persist(schedule);
     }
-    // 부분 조회
-    @Transactional
+
     public Optional<Schedule> findById(Long id) {
-        Schedule s = em.find(Schedule.class, id);
-        return Optional.ofNullable(s);
+        return Optional.ofNullable(entityManager.find(Schedule.class, id));
     }
-    // 일정 저장
-    @Transactional
-    public void save(Schedule s) {
-        em.persist(s);
+
+    public List<Schedule> findAll(Pageable pageable) {
+        return entityManager.createQuery("from Schedule order by updatedAt desc", Schedule.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
     }
-    // 일정 수정
+
     @Transactional
-    public void update(Schedule s) {
-        s.setUpdatedAt(LocalDateTime.now());
-        em.merge(s);
+    public void update(Schedule schedule) {
+        entityManager.merge(schedule);
     }
-    // 일정 삭제
+
     @Transactional
-    public void delete(Long id) {
-        Schedule s = em.find(Schedule.class, id);
-        if (s != null) {
-            em.remove(s);
-        }
+    public void delete(Schedule schedule) {
+        entityManager.remove(entityManager.contains(schedule) ? schedule : entityManager.merge(schedule));
     }
 }

@@ -2,8 +2,10 @@ package com.despereaux.jpascheduler.service;
 
 import com.despereaux.jpascheduler.entity.Schedule;
 import com.despereaux.jpascheduler.repository.ScheduleDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,37 +13,26 @@ import java.util.Optional;
 @Service
 public class ScheduleService {
 
-    private final ScheduleDao dao;
+    @Autowired(required = false)
+    private ScheduleDao scheduleDao;
 
-    public ScheduleService(ScheduleDao dao, ScheduleDao scheduleDao) {
-        this.dao = dao;
+    public void saveSchedule(@NonNull Schedule schedule) {
+        scheduleDao.save(schedule);
     }
-    // 전체 조회
-    public List<Schedule> findAll() {
-        return dao.findAll();
+
+    public Optional<Schedule> getScheduleById(@NonNull Long id) {
+        return scheduleDao.findById(id);
     }
-    // 부분 조회
-    public Optional<Schedule> findById(Long id) {
-        return dao.findById(id);
+
+    public List<Schedule> getSchedules(Pageable pageable) {
+        return scheduleDao.findAll(pageable);
     }
-    // 일정 저장
-    @Transactional
-    public void save(Schedule schedule) {
-        dao.save(schedule);
+
+    public void updateSchedule(@NonNull Schedule schedule) {
+        scheduleDao.update(schedule);
     }
-    // 일정 수정
-    public void update(Long id, Schedule newSchedule) {
-        Optional<Schedule> existingSchedule = dao.findById(id);
-        if (existingSchedule.isPresent()) {
-            Schedule updateSchedule = existingSchedule.get();
-            updateSchedule.setTitle(newSchedule.getTitle());
-            updateSchedule.setContent(newSchedule.getContent());
-            updateSchedule.setUsername(newSchedule.getUsername());
-            dao.update(updateSchedule);
-        }
-    }
-    // 일정 삭제
-    public void delete(Long id) {
-        dao.delete(id);
+
+    public void deleteSchedule(@NonNull Schedule schedule) {
+        scheduleDao.delete(schedule);
     }
 }

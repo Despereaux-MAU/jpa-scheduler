@@ -6,7 +6,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,38 +13,28 @@ import java.util.Optional;
 public class CommentDao {
 
     @PersistenceContext
-    private EntityManager em;
-    // 전체 조회 by 스케쥴
+    private EntityManager entityManager;
+
     @Transactional
-    public List<Comment> findAllByScheduleId(Long scheduleId) {
-        String jpql = "SELECT c FROM Comment c WHERE c.schedule.id = :scheduleId";
-        return em.createQuery(jpql, Comment.class)
-                .setParameter("scheduleId", scheduleId)
-                .getResultList();
+    public void save(Comment comment) {
+        entityManager.persist(comment);
     }
-    // 부분 조회
-    @Transactional
+
     public Optional<Comment> findById(Long id) {
-        Comment c = em.find(Comment.class, id);
-        return Optional.ofNullable(c);
+        return Optional.ofNullable(entityManager.find(Comment.class, id));
     }
-    // 댓글 저장
-    @Transactional
-    public void save(Comment c) {
-        em.persist(c);
+
+    public List<Comment> findAll() {
+        return entityManager.createQuery("from Comment", Comment.class).getResultList();
     }
-    // 댓글 수정
+
     @Transactional
-    public void update(Comment c) {
-        c.setUpdatedAt(LocalDateTime.now());
-        em.merge(c);
+    public void update(Comment comment) {
+        entityManager.merge(comment);
     }
-    // 댓글 삭제
+
     @Transactional
-    public void delete(Long id) {
-        Comment c = em.find(Comment.class, id);
-        if (c != null) {
-            em.remove(c);
-        }
+    public void delete(Comment comment) {
+        entityManager.remove(entityManager.contains(comment) ? comment : entityManager.merge(comment));
     }
 }
