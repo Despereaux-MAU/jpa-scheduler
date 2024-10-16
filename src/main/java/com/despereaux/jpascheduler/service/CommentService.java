@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,7 @@ public class CommentService {
     }
 
     public void updateComment(@NonNull Comment comment) {
+        comment.setUpdatedAt(LocalDateTime.now());
         commentDao.update(comment);
     }
 
