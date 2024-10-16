@@ -5,12 +5,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class ScheduleDto {
-    private Long userId;
+public class UserDto {
     private Long id;
-    private String title;
-    private String content;
+    private String name;
+    private String email;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private long commentCount;
 }

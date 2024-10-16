@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // JPA 구현체인 hibernate
     implementation 'org.hibernate:hibernate-core:6.1.7.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
     // JWT

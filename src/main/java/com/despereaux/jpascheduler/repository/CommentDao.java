@@ -6,6 +6,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class CommentDao {
 
     @Transactional
     public void update(Comment comment) {
+        comment.setUpdatedAt(LocalDateTime.now());
         entityManager.merge(comment);
     }
 
