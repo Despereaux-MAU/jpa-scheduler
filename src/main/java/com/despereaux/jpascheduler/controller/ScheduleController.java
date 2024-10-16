@@ -1,12 +1,10 @@
 package com.despereaux.jpascheduler.controller;
 
-import com.despereaux.jpascheduler.dto.ScheduleDto;
 import com.despereaux.jpascheduler.entity.Schedule;
 import com.despereaux.jpascheduler.service.ScheduleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
