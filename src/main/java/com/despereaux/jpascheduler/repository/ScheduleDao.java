@@ -15,32 +15,32 @@ import java.util.Optional;
 public class ScheduleDao {
 
     @PersistenceContext
-    private EntityManager entityManager;
-
+    private EntityManager em;
+    // 일정 저장
     @Transactional
     public void save(Schedule schedule) {
-        entityManager.persist(schedule);
+        em.persist(schedule);
     }
-
+    // 일정 조회(ID)
     public Optional<Schedule> findById(Long id) {
-        return Optional.ofNullable(entityManager.find(Schedule.class, id));
+        return Optional.ofNullable(em.find(Schedule.class, id));
     }
-
+    // 전체 조회
     public List<Schedule> findAll(Pageable pageable) {
-        return entityManager.createQuery("from Schedule order by updatedAt desc", Schedule.class)
+        return em.createQuery("from Schedule order by updatedAt desc", Schedule.class)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
     }
-
+    // 일정 수정
     @Transactional
     public void update(Schedule schedule) {
         schedule.setUpdatedAt(LocalDateTime.now());
-        entityManager.merge(schedule);
+        em.merge(schedule);
     }
-
+    // 일정 삭제
     @Transactional
     public void delete(Schedule schedule) {
-        entityManager.remove(entityManager.contains(schedule) ? schedule : entityManager.merge(schedule));
+        em.remove(em.contains(schedule) ? schedule : em.merge(schedule));
     }
 }

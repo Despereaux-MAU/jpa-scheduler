@@ -14,29 +14,29 @@ import java.util.Optional;
 public class UserDao {
 
     @PersistenceContext
-    private EntityManager entityManager;
-
+    private EntityManager em;
+    // 사용자 저장
     @Transactional
     public void save(User user) {
-        entityManager.persist(user);
+        em.persist(user);
     }
-
+    // 사용자 조회(id)
     public Optional<User> findById(Long id) {
-        return Optional.ofNullable(entityManager.find(User.class, id));
+        return Optional.ofNullable(em.find(User.class, id));
     }
-
+    // 전체 조회
     public List<User> findAll() {
-        return entityManager.createQuery("from User", User.class).getResultList();
+        return em.createQuery("from User", User.class).getResultList();
     }
-
+    // 사용자 수정
     @Transactional
     public void update(User user) {
         user.setUpdatedAt(LocalDateTime.now());
-        entityManager.merge(user);
+        em.merge(user);
     }
-
+    // 사용자 삭제
     @Transactional
     public void delete(User user) {
-        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
+        em.remove(em.contains(user) ? user : em.merge(user));
     }
 }

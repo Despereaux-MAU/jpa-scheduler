@@ -14,26 +14,26 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
-    private UserDao userDao;
-
+    private UserDao uDao;
+    // 사용자 저장
     public void saveUser(@NonNull User user) {
-        userDao.save(user);
+        uDao.save(user);
     }
-
+    // 사용자 조회(id)
     public Optional<User> getUserById(@NonNull Long id) {
-        return userDao.findById(id);
+        return uDao.findById(id);
     }
-
+    // 전체 조회
     public List<User> getAllUsers() {
-        return userDao.findAll();
+        return uDao.findAll();
     }
-
+    // 사용자 수정
     public void updateUser(@NonNull User user) {
         user.setUpdatedAt(LocalDateTime.now());
-        userDao.update(user);
+        uDao.update(user);
     }
-
+    // 사용자 삭제
     public void deleteUser(@NonNull User user) {
-        userDao.delete(user);
+        uDao.delete(user);
     }
 }

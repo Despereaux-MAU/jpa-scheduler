@@ -1,6 +1,5 @@
 package com.despereaux.jpascheduler.service;
 
-
 import com.despereaux.jpascheduler.entity.Comment;
 import com.despereaux.jpascheduler.entity.Schedule;
 import com.despereaux.jpascheduler.repository.CommentDao;
@@ -17,33 +16,33 @@ import java.util.Optional;
 public class CommentService {
 
     @Autowired
-    private CommentDao commentDao;
+    private CommentDao cDao;
 
     @Autowired
-    private ScheduleDao scheduleDao;
-
+    private ScheduleDao sDao;
+    // 댓글 저장
     public void saveComment(@NonNull Comment comment) {
-        commentDao.save(comment);
+        cDao.save(comment);
     }
-
+    // 댓글 조회(ID)
     public Optional<Comment> getCommentById(@NonNull Long id) {
-        return commentDao.findById(id);
+        return cDao.findById(id);
     }
-
+    // 전체 조회
     public List<Comment> getAllComments() {
-        return commentDao.findAll();
+        return cDao.findAll();
     }
-
+    // 댓글 수정
     public void updateComment(@NonNull Comment comment) {
         comment.setUpdatedAt(LocalDateTime.now());
-        commentDao.update(comment);
+        cDao.update(comment);
     }
-
+    // 댓글 삭제
     public void deleteComment(@NonNull Comment comment) {
-        commentDao.delete(comment);
+        cDao.delete(comment);
     }
-
+    // 댓글 조회(일정 ID)
     public Optional<Schedule> getScheduleById(Long id) {
-        return scheduleDao.findById(id);
+        return sDao.findById(id);
     }
 }
