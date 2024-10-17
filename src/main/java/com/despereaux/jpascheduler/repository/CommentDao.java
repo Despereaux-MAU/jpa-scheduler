@@ -14,29 +14,29 @@ import java.util.Optional;
 public class CommentDao {
 
     @PersistenceContext
-    private EntityManager entityManager;
-
+    private EntityManager em;
+    // 댓글 저장
     @Transactional
     public void save(Comment comment) {
-        entityManager.persist(comment);
+        em.persist(comment);
     }
-
+    // 댓글 조회(ID)
     public Optional<Comment> findById(Long id) {
-        return Optional.ofNullable(entityManager.find(Comment.class, id));
+        return Optional.ofNullable(em.find(Comment.class, id));
     }
-
+    // 전체 조회
     public List<Comment> findAll() {
-        return entityManager.createQuery("from Comment", Comment.class).getResultList();
+        return em.createQuery("from Comment", Comment.class).getResultList();
     }
-
+    // 댓글 수정
     @Transactional
     public void update(Comment comment) {
         comment.setUpdatedAt(LocalDateTime.now());
-        entityManager.merge(comment);
+        em.merge(comment);
     }
-
+    // 댓글 삭제
     @Transactional
     public void delete(Comment comment) {
-        entityManager.remove(entityManager.contains(comment) ? comment : entityManager.merge(comment));
+        em.remove(em.contains(comment) ? comment : em.merge(comment));
     }
 }
